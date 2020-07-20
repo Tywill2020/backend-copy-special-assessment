@@ -12,7 +12,7 @@ __author__ = "Tyrell Williams, help from group session demo"
 import re
 import os
 import sys
-# import shutil
+import shutil
 import subprocess
 import argparse
 
@@ -30,8 +30,16 @@ def get_special_paths(dirname):
     return special_paths
 
 
-# def copy_to(path_list, dest_dir):
-# This function is not completed yet
+def copy_to(path_list, dest_dir):
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+    for path in path_list:
+        print(dest_dir)
+        cmd = shutil.copy(path, dest_dir)
+    print("Command I'm going to do:")
+    print(''.join(cmd))
+    for basename in path_list:
+        print(os.listdir(path_list))
 
 
 def zip_to(path_list, dest_zip):
@@ -44,7 +52,6 @@ def zip_to(path_list, dest_zip):
 
 
 def main(args):
-    print(args)
     """Main driver code for copyspecial."""
     # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
@@ -52,7 +59,6 @@ def main(args):
     parser.add_argument('--tozip', help='dest zipfile for special files')
     parser.add_argument('from_dir', help='dest zipfile for special files')
     ns = parser.parse_args(args)
-    print(ns)
 
     # TODO: you must write your own code to get the command line args.
     # Read the docs and examples for the argparse module about how to do this.
@@ -63,9 +69,11 @@ def main(args):
     # exit(1).
 
     special_paths = get_special_paths(ns.from_dir)
-    print(special_paths)
-    # if ns.todir:
-    #     copy_to(special_paths, ns.todir)
+    if ns.todir:
+        copy_to(special_paths, ns.todir)
+    elif ns.tozip:
+        zip_to(special_paths, ns.tozip)
+        print('\n'.join(special_paths))
 
 
 if __name__ == "__main__":
